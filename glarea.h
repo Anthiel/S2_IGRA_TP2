@@ -27,7 +27,7 @@ protected slots:
     void onTimeout();
 
 public:
-    void DrawCylindre(Cylindre *cylindre);
+    void DrawCylindre(Cylindre *cylindre, GLdouble ep_cyl, GLdouble r_cyl, GLint nb_fac, int r, int v, int b);
 
 protected:
     void initializeGL() override;
@@ -44,9 +44,11 @@ private:
     double m_angle = 0;
     QTimer *m_timer = nullptr;
     double m_anim = 0;
+    double m_alpha = 0;
     double m_radius = 0.5;
     double m_ratio = 1;
-    Cylindre *cylindre;
+    Cylindre *GroscylindreG;
+    Cylindre *PetitcylindreG;
 };
 
 #endif // GLAREA_H

@@ -68,9 +68,9 @@ void GLArea::resizeGL(int w, int h)
     doProjection();
 }
 
-void GLArea::DrawCylindre(Cylindre *cylindre){
-    cylindre = new Cylindre(0.5, 0.7, 20);
-    cylindre->setColor(255,0,0);
+void GLArea::DrawCylindre(Cylindre *cylindre, GLdouble ep_cyl, GLdouble r_cyl, GLint nb_fac, int r, int v, int b){
+    cylindre = new Cylindre(ep_cyl, r_cyl, nb_fac);
+    cylindre->setColor(r,v,b);
     cylindre->dessiner_cylindre(cylindre->color);
 }
 
@@ -82,22 +82,16 @@ void GLArea::paintGL()
 
     glLoadIdentity();
     gluLookAt (0, 0, 3.0, 0, 0, 0, 0, 1, 0);
-    glRotatef (m_angle, 1, 0, 0);
-    DrawCylindre(cylindre);
-    /*
-    glRotatef (m_angle, 0, 1.0, 0.1);
-    glBegin(GL_TRIANGLES);
-    glColor3f (1.0, 0.6, 0.6);
-    glVertex3f(-0.7, -0.5, -0.1);
-    glVertex3f(0.8, -0.2, -0.1);
-    glVertex3f(0.1, 0.9-m_anim, 0.3);
-    glColor3f(0.6, 1.0, 0.6);
-    glVertex3f(-0.6, 0.7, -0.2);
-    glVertex3f(0.8, 0.8, -0.2);
-    glVertex3f(0.1, -0.9, 0.7);
-    glEnd();
-    */
-    // on ne met pas glutSwapBuffers(); !
+    glRotatef (m_angle, 0, 1, 0);
+
+    // cylindre principal
+    glPushMatrix();
+     glRotatef (m_alpha, 0, 0, 1);
+     DrawCylindre(GroscylindreG, 0.5, 0.7, 20, 255,0,0);
+     DrawCylindre(PetitcylindreG, 0.51, 0.1, 20,255,255,255);
+    glPopMatrix();
+
+
 }
 
 void GLArea::keyPressEvent(QKeyEvent *ev)
@@ -146,8 +140,8 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
 void GLArea::onTimeout()
 {
     qDebug() << __FUNCTION__ ;
-    m_anim += 0.01;
-    if (m_anim > 1) m_anim = 0;
+    m_alpha += 0.01;
+    if (m_alpha > 1) m_alpha = 0;
     update();
 }
 
