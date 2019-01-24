@@ -51,6 +51,8 @@ private:
 
     Cylindre *GroscylindreG;
     Cylindre *PetitcylindreG;
+    Cylindre *PetitcylindreH;
+    Cylindre *GroscylindreH;
 };
 
 #endif // GLAREA_H

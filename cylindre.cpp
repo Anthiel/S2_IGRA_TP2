@@ -64,7 +64,7 @@ void Cylindre::dessiner_rayon(){
     switch(flag_fill){
         case false :
             glBegin(GL_LINE_LOOP);
-            mod=0.5;
+            mod=0.6;
         break;
         default : glBegin(GL_QUADS);
             mod=0.8;
@@ -76,5 +76,12 @@ void Cylindre::dessiner_rayon(){
     glVertex3f (r_cyl*cos(alpha),	r_cyl*sin(alpha),	-ep_cyl/2);
     glVertex3f (r_cyl,				0,					-ep_cyl/2);
     glEnd();
+
+    if(!flag_fill){
+        glBegin(GL_LINE_LOOP);
+        glVertex3f (0,					0,					ep_cyl/2);
+        glVertex3f (0,					0,					-ep_cyl/2);
+        glEnd();
+    }
 
 }

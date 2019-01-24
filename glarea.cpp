@@ -3,6 +3,7 @@
 #include <GL/glu.h>
 #include <QDebug>
 #include <QSurfaceFormat>
+#include <math.h>
 
 GLArea::GLArea(QWidget *parent) :
     QOpenGLWidget(parent)
@@ -90,15 +91,25 @@ void GLArea::paintGL()
     // cylindre principal
     glPushMatrix();
     glRotatef (m_alpha, 0, 0, 1);
-    DrawCylindre(GroscylindreG, 0.2, 0.7, 20, 255,0,0);
+    DrawCylindre(GroscylindreG, 0.25, 1, 20, 255,0,0);
 
     glPushMatrix();
     glTranslatef (0, 0, -0.5);
-    DrawCylindre(PetitcylindreG, 1.4, 0.05, 3,255,255,255);
+    DrawCylindre(PetitcylindreG, 1.4, 0.08, 10,255,255,255);
+    glPopMatrix();
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef (0.8*cos(m_alpha*M_PI/(180)), 0.8*sin(m_alpha*M_PI/(180)), 0.3);
+    glPushMatrix();
+    glRotatef (m_alpha, 0, 0, 1);
+    DrawCylindre(PetitcylindreH, 1, 0.08, 5,0,255,255);
     glPopMatrix();
-
+    glPushMatrix();
+    glTranslatef (0, 0, 0.2);
+    DrawCylindre(GroscylindreH, 0.4, 0.3, 20,120,0,255);
+    glPopMatrix();
+    glPopMatrix();
 
 }
 
@@ -153,7 +164,7 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
 void GLArea::onTimeout()
 {
     qDebug() << __FUNCTION__ ;
-    m_alpha += 1;
+    m_alpha += 2;
     if (m_alpha >= 360) m_alpha = 0;
     update();
 }
