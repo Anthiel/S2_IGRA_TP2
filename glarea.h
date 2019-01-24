@@ -47,6 +47,8 @@ private:
     double m_alpha = 0;
     double m_radius = 0.5;
     double m_ratio = 1;
+    boolean flag_fill=true;
+
     Cylindre *GroscylindreG;
     Cylindre *PetitcylindreG;
 };

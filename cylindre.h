@@ -10,6 +10,7 @@ public:
     GLdouble r_cyl; //rayon AC
     GLint nb_fac; // nombre de facettes
     GLint color[3]; // RVB
+    boolean flag_fill;
 
 public:
     Cylindre(GLdouble ep_cyl, GLdouble r_cyl, GLint nb_fac);

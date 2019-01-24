@@ -12,6 +12,7 @@ GLArea::GLArea(QWidget *parent) :
     // Ce n'est pas indispensable
     QSurfaceFormat sf;
     sf.setDepthBufferSize(24);
+    sf.setSamples(16);
     setFormat(sf);
     qDebug() << "Depth is"<< format().depthBufferSize();
 
@@ -71,12 +72,14 @@ void GLArea::resizeGL(int w, int h)
 void GLArea::DrawCylindre(Cylindre *cylindre, GLdouble ep_cyl, GLdouble r_cyl, GLint nb_fac, int r, int v, int b){
     cylindre = new Cylindre(ep_cyl, r_cyl, nb_fac);
     cylindre->setColor(r,v,b);
+    cylindre->flag_fill=flag_fill;
     cylindre->dessiner_cylindre(cylindre->color);
 }
 
 void GLArea::paintGL()
 {
     qDebug() << __FUNCTION__ ;
+
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -86,9 +89,14 @@ void GLArea::paintGL()
 
     // cylindre principal
     glPushMatrix();
-     glRotatef (m_alpha, 0, 0, 1);
-     DrawCylindre(GroscylindreG, 0.5, 0.7, 20, 255,0,0);
-     DrawCylindre(PetitcylindreG, 0.51, 0.1, 20,255,255,255);
+    glRotatef (m_alpha, 0, 0, 1);
+    DrawCylindre(GroscylindreG, 0.2, 0.7, 20, 255,0,0);
+
+    glPushMatrix();
+    glTranslatef (0, 0, -0.5);
+    DrawCylindre(PetitcylindreG, 1.4, 0.05, 3,255,255,255);
+    glPopMatrix();
+
     glPopMatrix();
 
 
@@ -114,6 +122,11 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
                  setRadius(m_radius-0.05);
             else setRadius(m_radius+0.05);
             break;
+        case Qt::Key_T :
+            flag_fill= !flag_fill;
+            update();
+            break;
+
     }
 }
 
@@ -140,8 +153,8 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
 void GLArea::onTimeout()
 {
     qDebug() << __FUNCTION__ ;
-    m_alpha += 0.01;
-    if (m_alpha > 1) m_alpha = 0;
+    m_alpha += 1;
+    if (m_alpha >= 360) m_alpha = 0;
     update();
 }
 
