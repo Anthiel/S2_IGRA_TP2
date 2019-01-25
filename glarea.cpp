@@ -55,7 +55,7 @@ void GLArea::doProjection()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     GLfloat hr = m_radius, wr = hr * m_ratio;
-    glFrustum(-wr, wr, -hr, hr, 1.0, 5.0);
+    glFrustum(-wr, wr, -hr, hr, 1.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -81,36 +81,89 @@ void GLArea::paintGL()
 {
     qDebug() << __FUNCTION__ ;
 
+    double GH=0.8;
+    double HJ=2;
+    double HI=GH*sin(-m_alpha*M_PI/(180));;
+    double xJ=-((-1*GH*cos(-m_alpha*M_PI/(180))) + sqrt(pow(HJ,2)-pow(HI,2)));;
+    double JI=(xJ-GH*cos(-m_alpha*M_PI/(180)));
+    double beta=atan(HI/JI)*180/M_PI;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
     gluLookAt (0, 0, 3.0, 0, 0, 0, 0, 1, 0);
     glRotatef (m_angle, 0, 1, 0);
+    glTranslatef (-m_x, -m_y, m_z);
 
-    // cylindre principal
+    // cylindre principal et axe
     glPushMatrix();
-    glRotatef (m_alpha, 0, 0, 1);
-    DrawCylindre(GroscylindreG, 0.25, 1, 20, 255,0,0);
+        glRotatef (-m_alpha, 0, 0, 1);
+        DrawCylindre(cylindreG, 0.25, 1, 20, 255,0,0);
 
-    glPushMatrix();
-    glTranslatef (0, 0, -0.5);
-    DrawCylindre(PetitcylindreG, 1.4, 0.08, 10,255,255,255);
-    glPopMatrix();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef (0.8*cos(m_alpha*M_PI/(180)), 0.8*sin(m_alpha*M_PI/(180)), 0.3);
-    glPushMatrix();
-    glRotatef (m_alpha, 0, 0, 1);
-    DrawCylindre(PetitcylindreH, 1, 0.08, 5,0,255,255);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef (0, 0, 0.2);
-    DrawCylindre(GroscylindreH, 0.4, 0.3, 20,120,0,255);
-    glPopMatrix();
+        glPushMatrix();
+            glTranslatef (0, 0, -0.5);
+            DrawCylindre(cylindreAxeG, 1.4, 0.08, 8,255,255,255);
+        glPopMatrix();
     glPopMatrix();
 
+    // cylindre rotatif et axe
+    glPushMatrix();
+        glTranslatef (GH*cos(-m_alpha*M_PI/(180)), GH*sin(-m_alpha*M_PI/(180)), 0.3);
+        glPushMatrix();
+            glTranslatef (0, 0, -0.05);
+            glRotatef (-m_alpha, 0, 0, 1);
+            DrawCylindre(cylindreAxeH, 0.8, 0.06, 6,0,255,255);
+        glPopMatrix();
+
+        glPushMatrix();
+            glRotatef (-beta, 0, 0, 1);
+            glTranslatef (0, 0, 0.2);
+            DrawCylindre(cylindreH, 0.2, 0.3, 10,120,0,255);
+        glPopMatrix();
+    glPopMatrix();
+
+    //cylindres exterieur + piece HJ
+    glPushMatrix();
+        glTranslatef (xJ,0,0.5);
+        glPushMatrix();
+            glRotatef (-beta, 0, 0, 1);
+            DrawCylindre(cylindreJ1, 0.2, 0.3, 10,120,0,255);
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef (0,0,0.4);
+            DrawCylindre(cylindreJ2, 0.2, 0.2, 20,0,0,255);
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef (0,0,0.16);
+            DrawCylindre(cylindreAxeJ, 0.7, 0.04, 6, 255,255,0);
+        glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef ((xJ+GH*cos(-m_alpha*M_PI/(180)))/2,(GH*sin(-m_alpha*M_PI/(180)))/2,0.5);
+        glRotatef (-beta , 0, 0, 1);
+        glRotatef (90, 0, 1, 0);
+        glRotatef (45, 0, 0, 1);
+        DrawCylindre(cylindreHJ, 2, 0.14, 4, 120,0,255);
+    glPopMatrix();
+
+    //le piston et ça base
+    glPushMatrix();
+        glTranslatef (0,0,0.9);
+        glPushMatrix();
+            glTranslatef (xJ-1,0,0);
+            glRotatef (90, 0, 1, 0);
+            glRotatef (45, 0, 0, 1);
+            DrawCylindre(cylindrePiston, 2, 0.14, 4, 0,0,255);
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef (-4.1,0,0);
+            glRotatef (90, 0, 1, 0);
+            glRotatef (45, 0, 0, 1);
+            DrawCylindre(cylindreBasePiston, 2, 0.3, 4, 0,120,255);
+
+        glPopMatrix();
+    glPopMatrix();
 }
 
 void GLArea::keyPressEvent(QKeyEvent *ev)
@@ -118,9 +171,22 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
     qDebug() << __FUNCTION__ << ev->text();
 
     switch(ev->key()) {
-        case Qt::Key_Space :
+        case Qt::Key_4 :
             m_angle += 1;
             if (m_angle >= 360) m_angle -= 360;
+            update();
+            break;
+        case Qt::Key_6 :
+            m_angle -= 1;
+            if (m_angle <= -1) m_angle += 360;
+            update();
+            break;
+        case Qt::Key_8 :
+            m_y += 0.1;
+            update();
+            break;
+        case Qt::Key_2 :
+            m_y -= 0.1;
             update();
             break;
         case Qt::Key_A :
@@ -135,6 +201,22 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
             break;
         case Qt::Key_T :
             flag_fill= !flag_fill;
+            update();
+            break;
+        case Qt::Key_Z :
+            m_z+=0.1;
+            update();
+            break;
+        case Qt::Key_Q :
+            m_x-=0.1;
+            update();
+            break;
+        case Qt::Key_S :
+            m_z-=0.1;
+            update();
+            break;
+        case Qt::Key_D :
+            m_x+=0.1;
             update();
             break;
 

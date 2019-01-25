@@ -47,12 +47,22 @@ private:
     double m_alpha = 0;
     double m_radius = 0.5;
     double m_ratio = 1;
+    double m_x = 0;
+    double m_y = 0;
+    double m_z = 0;
     boolean flag_fill=true;
 
-    Cylindre *GroscylindreG;
-    Cylindre *PetitcylindreG;
-    Cylindre *PetitcylindreH;
-    Cylindre *GroscylindreH;
+
+    Cylindre *cylindreAxeG;
+    Cylindre *cylindreG;
+    Cylindre *cylindreAxeH;
+    Cylindre *cylindreH;
+    Cylindre *cylindreAxeJ;
+    Cylindre *cylindreJ1;
+    Cylindre *cylindreJ2;
+    Cylindre *cylindreHJ;
+    Cylindre *cylindreBasePiston;
+    Cylindre *cylindrePiston;
 };
 
 #endif // GLAREA_H
