@@ -140,7 +140,7 @@ void GLArea::paintGL()
         glPopMatrix();
     glPopMatrix();
     glPushMatrix();
-        glTranslatef ((xJ+GH*cos(-m_alpha*M_PI/(180)))/2,(GH*sin(-m_alpha*M_PI/(180)))/2,0.5);
+        glTranslatef ((xJ+GH*cos(-m_alpha*M_PI/(180)))/2,(GH*sin(-m_alpha*M_PI/(180)))/2,0.5); // xJ+GH*cos(-m_alpha*M_PI/(180)))/2 signe inverser pour GH*cos(-m_alpha*M_PI/(180)))/2 mais ça marche de cette manière seulement
         glRotatef (-beta , 0, 0, 1);
         glRotatef (90, 0, 1, 0);
         glRotatef (45, 0, 0, 1);
