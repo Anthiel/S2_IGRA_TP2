@@ -139,6 +139,7 @@ void GLArea::paintGL()
             DrawCylindre(cylindreAxeJ, 0.7, 0.04, 6, 255,255,0);
         glPopMatrix();
     glPopMatrix();
+    //piece HJ
     glPushMatrix();
         glTranslatef ((xJ+GH*cos(-m_alpha*M_PI/(180)))/2,(GH*sin(-m_alpha*M_PI/(180)))/2,0.5); // xJ+GH*cos(-m_alpha*M_PI/(180)))/2 signe inverser pour GH*cos(-m_alpha*M_PI/(180)))/2 mais ça marche de cette manière seulement
         glRotatef (-beta , 0, 0, 1);
@@ -147,7 +148,7 @@ void GLArea::paintGL()
         DrawCylindre(cylindreHJ, 2, 0.14, 4, 120,0,255);
     glPopMatrix();
 
-    //le piston et ça base
+    //le piston et sa base
     glPushMatrix();
         glTranslatef (0,0,0.9);
         glPushMatrix();
